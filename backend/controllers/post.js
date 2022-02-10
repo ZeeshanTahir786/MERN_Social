@@ -29,3 +29,14 @@ exports.createPost = async (req, res) => {
     });
   }
 };
+
+exports.likeAndUnlikePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
