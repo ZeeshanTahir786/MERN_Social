@@ -124,3 +124,22 @@ exports.getAllPosts = async (req, res) => {
     });
   }
 };
+
+exports.getPostOfFollowing = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate(
+      "following",
+      "posts"
+    );
+
+    return res.status(200).json({
+      success: true,
+      following: user.following,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

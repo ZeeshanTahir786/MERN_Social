@@ -60,7 +60,7 @@ exports.login = async (req, res) => {
       });
     }
     const token = await user.generateToken();
-    console.log(token);
+    // console.log(token);
     const options = {
       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
       httpOnly: true,
@@ -79,7 +79,7 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.folloeUser = async (req, res) => {
+exports.followUser = async (req, res) => {
   try {
     const userToFollow = await User.findById(req.params.id);
 
