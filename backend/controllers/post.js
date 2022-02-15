@@ -127,14 +127,29 @@ exports.getAllPosts = async (req, res) => {
 
 exports.getPostOfFollowing = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate(
-      "following",
-      "posts"
-    );
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    const posts = await Post.find({
+      owner: {
+        $in: user.following,
+      },
+    });
+    if (!posts) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
 
     return res.status(200).json({
       success: true,
-      following: user.following,
+      results: posts.length,
+      posts: posts,
     });
   } catch (error) {
     res.status(500).json({
