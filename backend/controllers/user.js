@@ -154,9 +154,16 @@ exports.followUser = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).select("+password");
 
     const { oldPassword, newPassword } = await req.body;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide both old and new password",
+      });
+    }
 
     const isMatch = await user.matchPassword(oldPassword);
 
@@ -173,6 +180,41 @@ exports.updatePassword = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Password Updated",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const { name, email } = req.body;
+    // if (!name || !email) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Please provide both name and email",
+    //   });
+    // }
+
+    if (user) {
+      user.name = name;
+    }
+    if (email) {
+      user.email = email;
+    }
+
+    // avatar upate
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile Updated",
     });
   } catch (error) {
     return res.status(500).json({
