@@ -252,22 +252,23 @@ exports.deleteComment = async (req, res) => {
           message: "Comment Id is required",
         });
       }
-
+      console.log("first", req.body.commentId);
       post.comments.forEach((comment, index) => {
-        if (comment._id.toString() === req.body.commentId._id.toString()) {
+        if (comment._id.toString() === req.body.commentId.toString()) {
           return post.comments.splice(index, 1);
         }
       });
       await post.save();
       return res.status(200).json({
         success: true,
-        message: "Selected Comment deleted",
+        message: "Selected Comment has deleted",
       });
     } else {
       // return res.status(403).json({
       //   success: false,
       //   message: "Unautherized User",
       // });
+      console.log("Second", req.body.commentId);
       post.comments.forEach((comment, index) => {
         if (comment.user.toString() === req.user._id.toString()) {
           return post.comments.splice(index, 1);
@@ -276,7 +277,7 @@ exports.deleteComment = async (req, res) => {
       await post.save();
       return res.status(200).json({
         success: true,
-        message: "Comment deleted successfully",
+        message: "Your Comment has deleted",
       });
     }
   } catch (error) {
