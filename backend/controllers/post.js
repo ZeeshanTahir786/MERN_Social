@@ -235,3 +235,54 @@ exports.commentOnPost = async (req, res) => {
     });
   }
 };
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+    if (post.owner.toString() === req.user._id.toString()) {
+      if (req.body.commentId === undefined) {
+        return res.status(400).json({
+          success: false,
+          message: "Comment Id is required",
+        });
+      }
+
+      post.comments.forEach((comment, index) => {
+        if (comment._id.toString() === req.body.commentId._id.toString()) {
+          return post.comments.splice(index, 1);
+        }
+      });
+      await post.save();
+      return res.status(200).json({
+        success: true,
+        message: "Selected Comment deleted",
+      });
+    } else {
+      // return res.status(403).json({
+      //   success: false,
+      //   message: "Unautherized User",
+      // });
+      post.comments.forEach((comment, index) => {
+        if (comment.user.toString() === req.user._id.toString()) {
+          return post.comments.splice(index, 1);
+        }
+      });
+      await post.save();
+      return res.status(200).json({
+        success: true,
+        message: "Comment deleted successfully",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
