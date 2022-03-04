@@ -1,11 +1,18 @@
 import axios from "axios";
-import { loginFailure, loginRequest, loginSuccess } from "./Slices/UserSlice";
+import {
+  loadUserFailure,
+  loadUserRequest,
+  loadUserSuccess,
+  loginFailure,
+  loginRequest,
+  loginSuccess,
+} from "./Slices/UserSlice";
 
 export const loginUser = (email, password) => async (dispatch) => {
   dispatch(loginRequest());
   try {
     const { data } = await axios.post(
-      "/login",
+      "/api/v1//login",
       {
         email,
         password,
@@ -18,6 +25,16 @@ export const loginUser = (email, password) => async (dispatch) => {
     );
     dispatch(loginSuccess(data.user));
   } catch (error) {
-    dispatch(loginFailure(error.response.data.message));
+    dispatch(loginFailure(error));
+  }
+};
+
+export const loadUser = () => async (dispatch) => {
+  dispatch(loadUserRequest());
+  try {
+    const { data } = await axios.get("/api/v1//me");
+    dispatch(loadUserSuccess(data.user));
+  } catch (error) {
+    dispatch(loadUserFailure(error));
   }
 };

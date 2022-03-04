@@ -4,6 +4,7 @@ const initialState = {
   isLoading: false,
   user: null,
   error: null,
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -16,10 +17,13 @@ const userSlice = createSlice({
     loginSuccess: (state, action) => {
       state.isLoading = false;
       state.user = action.payload;
+      state.error = null;
+      state.isAuthenticated = true;
     },
     loginFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+      state.isAuthenticated = false;
     },
     // -====================================
     registerRequest: (state) => {
@@ -28,10 +32,13 @@ const userSlice = createSlice({
     registerSuccess: (state, action) => {
       state.isLoading = false;
       state.user = action.payload;
+      state.error = null;
+      state.isAuthenticated = true;
     },
     registerFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+      state.isAuthenticated = false;
     },
     // -====================================
 
@@ -41,10 +48,13 @@ const userSlice = createSlice({
     loadUserSuccess: (state, action) => {
       state.isLoading = false;
       state.user = action.payload;
+      state.error = null;
+      state.isAuthenticated = true;
     },
     loadUserFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+      state.isAuthenticated = false;
     },
   },
 });
