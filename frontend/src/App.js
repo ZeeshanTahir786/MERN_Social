@@ -12,7 +12,7 @@ function App() {
   const { isAuthenticated } = useSelector((state) => state.user);
   useEffect(() => {
     dispatch(loadUser());
-  }, []);
+  }, [dispatch]);
   return (
     <Router>
       {isAuthenticated && <Header />}
