@@ -56,6 +56,9 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.isAuthenticated = false;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
   },
 });
 
@@ -69,6 +72,7 @@ export const {
   loginSuccess,
   registerRequest,
   registerSuccess,
+  clearError,
 } = userSlice.actions;
 
 export default userSlice.reducer;

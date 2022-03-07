@@ -138,7 +138,7 @@ exports.getPostOfFollowing = async (req, res) => {
       owner: {
         $in: user.following,
       },
-    });
+    }).populate("owner likes comments.user");
     if (!posts) {
       return res.status(404).json({
         success: false,
@@ -149,7 +149,7 @@ exports.getPostOfFollowing = async (req, res) => {
     return res.status(200).json({
       success: true,
       results: posts.length,
-      posts: posts,
+      posts: posts.reverse(),
     });
   } catch (error) {
     res.status(500).json({

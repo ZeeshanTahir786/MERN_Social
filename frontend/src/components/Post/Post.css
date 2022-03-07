@@ -28,3 +28,15 @@
   color: rgba(0, 0, 0);
   margin: 1vmax;
 }
+.postfooter > button {
+  color: rgba(0, 0, 0, 0.767);
+  margin: 0 1vmax;
+  border-radius: 100%;
+  transition: all 0.3s;
+}
+.postfooter > button:hover {
+  transform: translateY(-4px);
+}
+.postfooter > button > svg {
+  font-size: 1.7vmax;
+}

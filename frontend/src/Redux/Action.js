@@ -1,5 +1,10 @@
 import axios from "axios";
 import {
+  postOfFollowingFailure,
+  postOfFollowingRequest,
+  postOfFollowingSuccess,
+} from "./Slices/PostOfFollowingSlice";
+import {
   loadUserFailure,
   loadUserRequest,
   loadUserSuccess,
@@ -36,5 +41,15 @@ export const loadUser = () => async (dispatch) => {
     dispatch(loadUserSuccess(data.user));
   } catch (error) {
     dispatch(loadUserFailure(error));
+  }
+};
+
+export const getFollowingPosts = () => async (dispatch) => {
+  try {
+    dispatch(postOfFollowingRequest());
+    const { data } = await axios.get("/api/v1/posts");
+    dispatch(postOfFollowingSuccess(data?.posts));
+  } catch (error) {
+    dispatch(postOfFollowingFailure(error));
   }
 };
