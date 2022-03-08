@@ -4,6 +4,7 @@ import {
   allUsersRequest,
   allUsersSuccess,
 } from "./Slices/AllUsersSlice";
+import { likeFailure, likeRequest, likeSuccess } from "./Slices/LikePostSlice";
 import {
   postOfFollowingFailure,
   postOfFollowingRequest,
@@ -65,5 +66,14 @@ export const getAllUsers = () => async (dispatch) => {
     dispatch(allUsersSuccess(data?.users));
   } catch (error) {
     dispatch(allUsersFailure(error));
+  }
+};
+export const likePost = (id) => async (dispatch) => {
+  try {
+    dispatch(likeRequest());
+    const { data } = await axios.get(`/api/v1/post/${id}`);
+    dispatch(likeSuccess(data?.message));
+  } catch (error) {
+    dispatch(likeFailure(error));
   }
 };

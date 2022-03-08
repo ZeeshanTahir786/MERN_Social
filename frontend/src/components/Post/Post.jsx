@@ -6,9 +6,11 @@ import {
   MoreVert,
 } from "@mui/icons-material";
 import { Avatar, Button, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getFollowingPosts, likePost } from "../../Redux/Action";
 import "./Post.css";
 
 const Post = ({
@@ -24,9 +26,28 @@ const Post = ({
   isAccount = false,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const handleLike = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  const handleLike = async () => {
     setIsLiked(!isLiked);
+
+    await dispatch(likePost(postId));
+    if (isAccount) {
+      console.log("bring my posts");
+    } else {
+      dispatch(getFollowingPosts());
+    }
   };
+
+  useEffect(() => {
+    likes.forEach((like) => {
+      if (like._id === user._id) {
+        setIsLiked(true);
+      }
+    });
+  }, [likes, user._id]);
+
   return (
     <div className="post">
       <div className="postHeader">
