@@ -7,7 +7,7 @@ exports.createPost = async (req, res) => {
       caption: req.body.caption,
       image: {
         public_id: "req.body",
-        url: "req.body.url",
+        url: req.body.imageUrl,
       },
       owner: req.user._id,
     };

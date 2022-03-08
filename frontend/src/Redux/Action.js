@@ -1,5 +1,10 @@
 import axios from "axios";
 import {
+  allUsersFailure,
+  allUsersRequest,
+  allUsersSuccess,
+} from "./Slices/AllUsersSlice";
+import {
   postOfFollowingFailure,
   postOfFollowingRequest,
   postOfFollowingSuccess,
@@ -51,5 +56,14 @@ export const getFollowingPosts = () => async (dispatch) => {
     dispatch(postOfFollowingSuccess(data?.posts));
   } catch (error) {
     dispatch(postOfFollowingFailure(error));
+  }
+};
+export const getAllUsers = () => async (dispatch) => {
+  try {
+    dispatch(allUsersRequest());
+    const { data } = await axios.get("/api/v1/users");
+    dispatch(allUsersSuccess(data?.users));
+  } catch (error) {
+    dispatch(allUsersFailure(error));
   }
 };
