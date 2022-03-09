@@ -1,5 +1,10 @@
 import axios from "axios";
 import {
+  addCommentFailure,
+  addCommentRequest,
+  addCommentSuccess,
+} from "./Slices/AddCommentSlice";
+import {
   allUsersFailure,
   allUsersRequest,
   allUsersSuccess,
@@ -75,5 +80,24 @@ export const likePost = (id) => async (dispatch) => {
     dispatch(likeSuccess(data?.message));
   } catch (error) {
     dispatch(likeFailure(error));
+  }
+};
+export const addComment = (id, comment) => async (dispatch) => {
+  try {
+    dispatch(addCommentRequest());
+    const { data } = await axios.put(
+      `/api/v1/post/comment/${id}`,
+      {
+        comment,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    dispatch(addCommentSuccess(data?.message));
+  } catch (error) {
+    dispatch(addCommentFailure(error));
   }
 };

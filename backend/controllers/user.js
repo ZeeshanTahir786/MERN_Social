@@ -196,7 +196,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
 
-    const { name, email } = req.body;
+    const { name, email, url } = req.body;
     // if (!name || !email) {
     //   return res.status(400).json({
     //     success: false,
@@ -209,6 +209,9 @@ exports.updateProfile = async (req, res) => {
     }
     if (email) {
       user.email = email;
+    }
+    if (url) {
+      user.avatar.url = url;
     }
 
     // avatar upate

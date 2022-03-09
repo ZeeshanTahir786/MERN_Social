@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getFollowingPosts, likePost } from "../../Redux/Action";
+import { getFollowingPosts, likePost, addComment } from "../../Redux/Action";
 import User from "../User/User";
 import "./Post.css";
 
@@ -27,6 +27,8 @@ const Post = ({
   isAccount = false,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [commentValue, setCommentValue] = useState("");
+  const [commentToggle, setCommentToggle] = useState(false);
   const [likesUser, setLikesUser] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -49,6 +51,17 @@ const Post = ({
       }
     });
   }, [likes, user._id]);
+
+  const addCommentHandler = async (e) => {
+    e.preventDefault();
+    await dispatch(addComment(postId, commentValue));
+
+    if (isAccount) {
+      console.log("bring my posts");
+    } else {
+      dispatch(getFollowingPosts());
+    }
+  };
 
   return (
     <div className="post">
@@ -93,7 +106,7 @@ const Post = ({
         <Button onClick={handleLike}>
           {isLiked ? <Favorite style={{ color: "red" }} /> : <FavoriteBorder />}
         </Button>
-        <Button>
+        <Button onClick={() => setCommentToggle(!commentToggle)}>
           <ChatBubbleOutline />
         </Button>
         {isDeleted ? (
@@ -113,6 +126,25 @@ const Post = ({
               avatar={like.avatar.url}
             />
           ))}
+        </div>
+      </Dialog>
+      <Dialog
+        open={commentToggle}
+        onClose={() => setCommentToggle(!commentToggle)}
+      >
+        <div className="Dialogbox">
+          <Typography variant="h4">Comments</Typography>
+          <form className="commentForm" onSubmit={addCommentHandler}>
+            <input
+              placeholder="Add a comment..."
+              onChange={(e) => setCommentValue(e.target.value)}
+              required
+              value={commentValue}
+            />
+            <Button type="submit" variant="contained">
+              Add
+            </Button>
+          </form>
         </div>
       </Dialog>
     </div>

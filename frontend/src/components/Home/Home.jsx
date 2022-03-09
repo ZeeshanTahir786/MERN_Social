@@ -7,6 +7,10 @@ import Loader from "../Loader/Loader";
 import "./Home.css";
 import { Typography } from "@mui/material";
 import { clearError, clearMessage } from "../../Redux/Slices/LikePostSlice";
+import {
+  clearError as commentMessageError,
+  clearMessage as commentClearMessage,
+} from "../../Redux/Slices/AddCommentSlice";
 import { useAlert } from "react-alert";
 
 const Home = () => {
@@ -14,6 +18,9 @@ const Home = () => {
   const alert = useAlert();
 
   const { error: likeError, message } = useSelector((state) => state.LikePost);
+  const { error: commentError, message: commentMessage } = useSelector(
+    (state) => state.addComment
+  );
 
   useEffect(() => {
     dispatch(getFollowingPosts());
@@ -36,7 +43,23 @@ const Home = () => {
       alert.success(message);
       dispatch(clearMessage());
     }
-  }, [likeError, message, alert, error, dispatch]);
+    if (commentError) {
+      alert.error(commentError);
+      dispatch(commentMessageError());
+    }
+    if (commentMessage) {
+      alert.success(commentMessage);
+      dispatch(commentClearMessage());
+    }
+  }, [
+    likeError,
+    message,
+    alert,
+    error,
+    dispatch,
+    commentError,
+    commentMessage,
+  ]);
 
   const { isLoading: usersLoading, users } = useSelector(
     (state) => state.allUsers
@@ -71,8 +94,8 @@ const Home = () => {
               key={user._id}
               userId={user._id}
               name={user.name}
-              avatar={"https://avatars.githubusercontent.com/u/25058652?v=4"}
-              // avatar={user.avatar.url}
+              // avatar={"https://avatars.githubusercontent.com/u/25058652?v=4"}
+              avatar={user.avatar.url}
             />
           ))
         ) : (
