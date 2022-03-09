@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getFollowingPosts, likePost, addComment } from "../../Redux/Action";
+import CommentCard from "../CommentCard/CommentCard";
 import User from "../User/User";
 import "./Post.css";
 
@@ -145,6 +146,20 @@ const Post = ({
               Add
             </Button>
           </form>
+          {comments.length > 0 ? (
+            comments.map((comment) => (
+              <CommentCard
+                userId={comment.user._id}
+                name={comment.user.name}
+                avatar={comment.user.avatar.url}
+                comment={comment.comment}
+                commentId={comment._id}
+                postId
+              />
+            ))
+          ) : (
+            <Typography>No Comments</Typography>
+          )}
         </div>
       </Dialog>
     </div>
