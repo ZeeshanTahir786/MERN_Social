@@ -40,3 +40,9 @@
 .postfooter > button > svg {
   font-size: 1.7vmax;
 }
+
+.Dialogbox {
+  min-width: 40vw;
+  height: 100vh;
+  padding: 2vmax;
+}
